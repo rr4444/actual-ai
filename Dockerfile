@@ -22,6 +22,19 @@ ARG COMMIT_HASH=unknown
 ENV APP_VERSION=$VERSION
 ENV APP_COMMIT_HASH=$COMMIT_HASH
 
+# Overwrite version.ts with compile-time Git and package version info
+USER root
+RUN apk add --no-cache git && \
+    VAL_VERSION="${VERSION}" && \
+    if [ "$VAL_VERSION" = "unknown" ]; then VAL_VERSION=$(node -p "require('./package.json').version"); fi && \
+    VAL_HASH="${COMMIT_HASH}" && \
+    if [ "$VAL_HASH" = "unknown" ] && [ -d .git ]; then VAL_HASH=$(git rev-parse --short HEAD); fi && \
+    echo "export const appVersion = '$VAL_VERSION';" > src/version.ts && \
+    echo "export const commitHash = '$VAL_HASH';" >> src/version.ts && \
+    chown node:node src/version.ts && \
+    apk del git
+USER node
+
 RUN npm run build
 CMD [ "node", "dist/app.js" ]
 

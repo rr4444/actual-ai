@@ -20,7 +20,7 @@ Transaction ID: {{id}}
 
 Existing categories by group:
 {{#each categoryGroups}}
-GROUP: {{name}} (ID: "{{id}}")
+GROUP: {{name}}
 {{#each categories}}
 * {{name}} (ID: "{{id}}")
 {{/each}}
@@ -50,6 +50,8 @@ IMPORTANT: You MUST respond with ONLY a valid JSON ARRAY of objects, where each 
 ]
 
 If a rule renders as "→ leave uncategorized", that rule explicitly tells you NOT to assign a category. Match it with type "rule" and the ruleName, and OMIT categoryId — do not invent one and do not fall back to "new".
+
+IMPORTANT: For refund transactions (positive amounts for merchants like Amazon or eBay, where Type is "Refund"), you MUST classify them under the original expense category (e.g., Food, Clothing) to offset the original expense, NOT under Income.
 
 DO NOT output any text before or after the JSON ARRAY. Your entire response must be a valid, parsable JSON ARRAY mapped exactly to every input transaction!
 

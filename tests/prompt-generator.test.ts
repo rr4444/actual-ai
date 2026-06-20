@@ -75,7 +75,7 @@ describe('PromptGenerator', () => {
       categoryGroups: safeCategoryGroups,
       // For legacy singular template format
       amount: Math.abs(transaction.amount),
-      type: transaction.amount > 0 ? 'Income' : 'Outcome',
+      type: transaction.amount > 0 ? 'Refund' : 'Expense',
       description: transaction.notes ?? '',
       payee: payeeName ?? transaction.imported_payee ?? '',
       importedPayee: transaction.imported_payee ?? '',
@@ -86,7 +86,7 @@ describe('PromptGenerator', () => {
       transactions: [{
         id: transaction.id,
         amount: Math.abs(transaction.amount),
-        type: transaction.amount > 0 ? 'Income' : 'Outcome',
+        type: transaction.amount > 0 ? 'Refund' : 'Expense',
         description: transaction.notes ?? '',
         payee: payeeName ?? transaction.imported_payee ?? '',
         date: transaction.date ?? '',
@@ -188,7 +188,7 @@ ANSWER BY A CATEGORY ID - DO NOT CREATE ENTIRE SENTENCE - DO NOT WRITE CATEGORY 
     // Check for transaction details
     expect(prompt).toContain('Transaction ID: 1');
     expect(prompt).toContain('* Amount: 1000');
-    expect(prompt).toContain('* Type: Outcome');
+    expect(prompt).toContain('* Type: Expense');
     expect(prompt).toContain('* Date: 2021-01-01');
   });
 

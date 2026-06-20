@@ -1,4 +1,5 @@
-console.log(`rr4444/actual-ai version ${process.env.APP_VERSION || 'unknown'} (commit hash: ${process.env.APP_COMMIT_HASH || 'unknown'})`);
+import { appVersion, commitHash } from './src/version';
+console.log(`rr4444/actual-ai version ${appVersion} (commit hash: ${commitHash})`);
 
 import cron from 'node-cron';
 import { cronSchedule, isFeatureEnabled } from './src/config';

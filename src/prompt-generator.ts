@@ -89,7 +89,7 @@ class PromptGenerator implements PromptGeneratorI {
       return {
         id: transaction.id,
         amount: Math.abs(transaction.amount),
-        type: transaction.amount > 0 ? 'Income' : 'Outcome',
+        type: transaction.amount > 0 ? 'Refund' : 'Expense',
         description,
         payee: payeeName ?? transaction.imported_payee ?? '',
         date: transaction.date ?? '',
