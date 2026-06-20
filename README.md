@@ -223,6 +223,21 @@ loops.
 8. `cleared`: A boolean indicating if the transaction is cleared. This is taken from `transaction.cleared`.
 9. `reconciled`: A boolean indicating if the transaction is reconciled. This is taken from `transaction.reconciled`.
 
+### ⚠️ Payee Renaming & Workflow Behavior
+
+If you use payee renaming rules inside Actual Budget, the transactions in your budget database will contain two different payee representations:
+1. **Resolved Payee Name (`payee`)**: The clean, renamed payee entity name inside Actual Budget.
+2. **Raw Imported Payee (`importedPayee`)**: The original raw merchant string imported from your bank feed/CSV file.
+
+#### Impact on Noter Workflows (`amazonNoterWorkflow`, `paypalNoterWorkflow`, `ebayNoterWorkflow`)
+The filtering logic checks **both** the raw `imported_payee` field and the resolved `payee_name`. 
+- Even if a transaction has been renamed in Actual Budget (e.g. from `PAYPAL *LEBARA` to `Lebara`), `actual-ai` will still correctly identify it as a PayPal transaction using its raw `imported_payee` field and ignore it until the noter companion has matched and tagged it.
+- This ensures your automations work seamlessly without collision, regardless of payee renaming.
+
+#### Impact on LLM Prompts
+- The LLM prompt context primarily receives the **resolved/renamed payee name** (`payee`) if it exists, falling back to `importedPayee` only if no resolved payee is mapped.
+- Renaming payees to clean, standard names in Actual Budget significantly improves classification accuracy, as the LLM receives cleaner input.
+
 ## New Category Suggestions
 
 When `suggestNewCategories` feature is enabled, the system will:
